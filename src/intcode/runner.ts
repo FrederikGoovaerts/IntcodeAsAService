@@ -1,17 +1,17 @@
-enum FeedbackType {
+export enum FeedbackType {
   Input = "INPUT",
   Output = "OUTPUT",
   Halt = "HALT"
 }
 
-type YieldFeedback =
+export type YieldFeedback =
   | { type: FeedbackType.Input }
   | { type: FeedbackType.Output; output: number };
-type ReturnFeedback = { type: FeedbackType.Halt; output: number[] };
+export type ReturnFeedback = { type: FeedbackType.Halt; output: number[] };
 
 export function* intcodeRunner(
   programBase: number[]
-): Generator<YieldFeedback, ReturnFeedback, number> {
+): Generator<YieldFeedback, ReturnFeedback, number | undefined> {
   const endPadding = new Array(200000);
   endPadding.fill(0);
   const program = [...programBase].concat(endPadding);
