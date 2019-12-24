@@ -2,6 +2,10 @@
   "name": "intcodeasaservice",
   "version": "1.0.0",
   "author": "Frederik Goovaerts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/FrederikGoovaerts/IntcodeAsAService.git"
+  },
   "main": "lib/app.js",
   "scripts": {
     "clean": "rimraf lib/",
