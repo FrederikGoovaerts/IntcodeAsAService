@@ -11,6 +11,8 @@ const app = express();
 app.use(express.json());
 app.use(expressBearerToken());
 
+app.use(express.static("static"));
+
 const intcodeManager = new IntcodeManager();
 
 app.post("/", (req, res) => {
