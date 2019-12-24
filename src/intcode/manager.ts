@@ -5,6 +5,10 @@ import {
   FeedbackType
 } from "./runner";
 
+type CleanupItem = { id: number; expiration: number };
+
+const TWO_HOURS_MS = 7200000;
+
 export class IntcodeManager {
   private runners: Map<
     number,
@@ -12,18 +16,24 @@ export class IntcodeManager {
   >;
   private results: Map<number, number[]>;
   private idCounter: number;
+  private cleanupQueue: CleanupItem[];
 
   constructor() {
     this.runners = new Map();
     this.results = new Map();
+    this.cleanupQueue = [];
     this.idCounter = 0;
-    setInterval(this.cleanUpStaleRunners, 15000);
+    setInterval(this.cleanUpStaleRunners, 60000);
   }
 
   createRunner(program: number[]): number {
     const id = this.nextId();
     const runner = intcodeRunner(program);
     this.runners.set(id, runner);
+    this.cleanupQueue.push({ id, expiration: Date.now() + TWO_HOURS_MS });
+    console.log(
+      `Registered new runner. Currently: ${this.runners.size} runners.`
+    );
     return id;
   }
 
@@ -58,8 +68,19 @@ export class IntcodeManager {
   }
 
   private cleanUpStaleRunners = (): void => {
-    console.log("Running cleanup...");
-    // Do cleanup
-    console.log(`Amount left: ${this.runners.size}`);
+    if (this.cleanupQueue.length > 0) {
+      let counter = 0;
+      while (this.cleanupQueue.length > 0) {
+        if (this.cleanupQueue[0].expiration > Date.now()) {
+          break;
+        }
+        const { id } = this.cleanupQueue.shift()!;
+        this.runners.delete(id);
+        this.results.delete(id);
+      }
+      console.log(
+        `Cleaned up ${counter} runners. Currently: ${this.runners.size} runners.`
+      );
+    }
   };
 }
