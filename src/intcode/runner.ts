@@ -35,6 +35,9 @@ export function* intcodeRunner(
         break;
       case 3: {
         const input = yield { type: FeedbackType.Input };
+        if (input === undefined) {
+          throw new Error("Expected input but none provided.");
+        }
         put(instructionPointer + 1, input, modes[0]);
         instructionPointer += 2;
         break;
@@ -64,7 +67,9 @@ export function* intcodeRunner(
         halt();
         break;
       default:
-        throw new Error(`OPCODE: ${program[instructionPointer]}`);
+        throw new Error(
+          `Invalid opcode reached: ${program[instructionPointer]} (at location ${instructionPointer}).`
+        );
     }
   }
 
