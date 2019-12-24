@@ -17,7 +17,7 @@ app.post("/", (req, res) => {
   // Do verification of req body
   const id = intcodeManager.createRunner(req.body.program);
   const response = jwt.sign({ id }, jwtSecret, { expiresIn: "1h" });
-  res.status(201).send(response);
+  res.status(201).send({ token: response });
 });
 
 app.post("/next", (req, res) => {
