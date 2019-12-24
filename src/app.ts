@@ -24,8 +24,11 @@ app.post("/next", (req, res) => {
   try {
     const token = jwt.verify(req.token!, jwtSecret);
     const id = (token as IdToken).id;
-    const input = req.body.input;
-    const result = intcodeManager.next(id, input);
+    const input: number | undefined = req.body.input;
+    if (input !== undefined && (isNaN(Number(input)) || input === null)) {
+      throw new Error("Invalid input value (can only be a number if present).");
+    }
+    const result = intcodeManager.next(id, Number(input));
     res.status(200).send(result);
   } catch (e) {
     let message = e.message ?? e;
