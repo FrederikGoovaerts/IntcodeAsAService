@@ -24,7 +24,7 @@ app.post("/", (req, res) => {
     }
     const id = intcodeManager.createRunner(req.body.program.map(Number));
     const response = jwt.sign({ id }, jwtSecret, { expiresIn: "1h" });
-    res.status(201).send({ token: response });
+    res.status(201).send({ access_token: response });
   } catch (e) {
     let message = e.message ?? e;
     res.status(400).send(message);
