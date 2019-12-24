@@ -73,8 +73,12 @@ export function* intcodeRunner(
     }
   }
 
+  const lastNonZero = program.map(val => val !== 0).lastIndexOf(true);
   // TODO: Figure out why TS complains without the 'as'
-  return { type: FeedbackType.Halt as FeedbackType.Halt, output: program };
+  return {
+    type: FeedbackType.Halt as FeedbackType.Halt,
+    output: program.slice(0, lastNonZero + 1)
+  };
 
   // General utility
 
