@@ -1,0 +1,25 @@
+{
+  "name": "intcodeasaservice",
+  "version": "1.0.0",
+  "author": "Frederik Goovaerts",
+  "main": "lib/app.js",
+  "scripts": {
+    "clean": "rimraf lib/",
+    "build": "npm run clean && tsc",
+    "exec": "node lib/app.js",
+    "start": "npm run build && npm run exec"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1",
+    "express-bearer-token": "^2.4.0",
+    "jsonwebtoken": "^8.5.1"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.2",
+    "@types/jsonwebtoken": "^8.3.5",
+    "@types/node": "^13.1.0",
+    "rimraf": "^3.0.0",
+    "typescript": "^3.7.4"
+  }
+}
