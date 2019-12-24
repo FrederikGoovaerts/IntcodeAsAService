@@ -14,10 +14,21 @@ app.use(expressBearerToken());
 const intcodeManager = new IntcodeManager();
 
 app.post("/", (req, res) => {
-  // Do verification of req body
-  const id = intcodeManager.createRunner(req.body.program);
-  const response = jwt.sign({ id }, jwtSecret, { expiresIn: "1h" });
-  res.status(201).send({ token: response });
+  try {
+    if (
+      req.body.program === undefined ||
+      !Array.isArray(req.body.program) ||
+      req.body.program.some(isNaN)
+    ) {
+      throw new Error("Program is not an array of numbers.");
+    }
+    const id = intcodeManager.createRunner(req.body.program.map(Number));
+    const response = jwt.sign({ id }, jwtSecret, { expiresIn: "1h" });
+    res.status(201).send({ token: response });
+  } catch (e) {
+    let message = e.message ?? e;
+    res.status(400).send(message);
+  }
 });
 
 app.post("/next", (req, res) => {
